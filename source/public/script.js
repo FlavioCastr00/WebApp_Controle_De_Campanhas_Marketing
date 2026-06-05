@@ -47,22 +47,16 @@ formulario.addEventListener("submit", async (event) => {
     const plataforma = document.getElementById("plataforma").value;
     const dataComeco = document.getElementById("data-comeco").value;
     const dataFim = document.getElementById("data-fim").value;
-    const duracao = document.getElementById("duracao").value;
     const custoPorDia = parseFloat(document.getElementById("custo-por-dia").value);
     const iss = parseFloat(document.getElementById("custo-iss").value);
     const pis = parseFloat(document.getElementById("custo-pis").value);
 
-    const inicio = new Date(dataComeco);
-    const fim = new Date(dataFim);
+    const inicio = new Date(dataComeco + "T00:00:00");
+    const fim = new Date(dataFim + "T00:00:00");
     
-    const diferencaMs = fim - inicio;
-    const dias = diferencaMs / (1000 * 60 * 60 * 24);
+    const diferencaMs = fim.getTime() - inicio.getTime();
+    const dias = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
     console.log(dias);
-
-    if (dias != duracao) {
-        alert("A duração não corresponde às datas");
-        return;
-    }
 
     //Validação dos Dados:
     if (nome === "") {
@@ -94,15 +88,41 @@ formulario.addEventListener("submit", async (event) => {
     const data = {
         NomeCampanha: nome,
         Plataforma: plataforma,
+        Duracao: dias,
         DataComeco: dataComeco,
         DataFim: dataFim,
-        Duracao: duracao,
         CustoPorDia: custoPorDia,
         ISS: iss,
         PIS: pis
     }
 
     console.log(data);
+
+    try {
+        const resposta = await fetch("/Campanhas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!resposta.ok) {
+            const erro = await resposta.text();
+            throw new Error(erro);
+        }
+
+        const resultado = await resposta.json();
+        console.log(resposta);
+        
+        alert("Campanha criada!");
+
+        await carregarCampanhas();
+    }
+    catch (erro){
+        console.error(erro);
+        alert("Erro ao criar a campanha");
+    }
 });
 
 // Carregar Detalhes Diários da Campanha
@@ -144,6 +164,7 @@ async function carregarCampanhas() {
 
     // Elemento no qual a lista será gerada
     const lista = document.getElementById('lista-div');
+    lista.innerHTML = "";
 
     campanhas.forEach(campanha => {
 
