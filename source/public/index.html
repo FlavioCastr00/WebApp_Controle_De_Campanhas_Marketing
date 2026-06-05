@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Campanhas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Lista de Campanhas</h1>
+
+    <ul id="lista"></ul>
+
+    <div class="main">
+        <button type="button" class="add-btn">ADD +</button>
+        <div id="lista-div">
+            <!-- Lista de Campanhas -->
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="overlay hide"></div>
+
+    <!-- Modal de Detalhes Diários das Campanhas -->
+    <div id="modal-detalhes" class="detalhes hide">
+        <div class="cabecalho">
+            <h1 id="campanha-nome">Averá coias por aqui...</h1>
+            <button type="button" class="fechar-btn">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div id="detalhes-div">
+            <!-- Detalhes da Campanha -->
+            <table class="tabela-detalhes">
+                <thead>
+                    <tr>
+                        <th>Dia</th>
+                        <th>Data</th>
+                        <th>Alcance Total</th>
+                        <th>Vizualizações Totais</th>
+                        <th>Visitas à Página</th>
+                        <th>Cliques no Link</th>
+                    </tr>
+                </thead>
+                <tbody id="detalhes-tbody">
+                    <!-- Dados diários da Campanha -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Formulario para Adicionar Campanha -->
+    <div id="modal-add" class="add hide">
+        <h3>Adicione uma Campanha</h3>
+        <form id="formulario">
+            <label for="nome-campanha">Nome da Campanha:</label>
+            <input type="text" id="nome-campanha" name="nome-campanha" placeholder="ex. Graduação 2026" required>
+
+            <label for="plataforma">Plataforma:</label>
+            <select id="plataforma" name="plataforma" required>
+                <option value="Instagram">Instagram</option>
+                <option value="Facebook">Facebook</option>
+            </select>
+
+            <label for="data-comeco">Data de Início:</label>
+            <input type="date" id="data-comeco" name="data-comeco" required>
+
+            <label for="data-fim">Data de Término:</label>
+            <input type="date" id="data-fim" name="data-fim" required>
+
+            <label for="custo-por-dia">Custo por Dia:</label>
+            <input type="number" step="0.01" id="custo-por-dia" name="custo-por-dia" min="1" required>
+
+            <label for="custo-iss">Custo ISS:</label>
+            <input type="number" step="0.01" id="custo-iss" name="custo-iss" min="0" required>
+
+            <label for="custo-pis">Custo PIS:</label>
+            <input type="number"  step="0.01" id="custo-pis" name="custo-pis" min="0" required>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
