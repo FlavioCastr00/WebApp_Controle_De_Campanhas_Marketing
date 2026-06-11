@@ -99,7 +99,7 @@ formulario.addEventListener("submit", async (event) => {
         CustoPorDia: custoPorDia,
         ISS: iss,
         PIS: pis,
-        NomeNegócio: negocio
+        NomeNegocio: negocio
     }
 
     console.log(data);
@@ -186,9 +186,7 @@ async function carregarCampanhas() {
             <hr>
             <div class="campanha-div">
                 <div class="cabecalho-campanha">
-                    <h3 class="campanha-titulo">${
-                        GerarCodigo(campanha.Plataforma, campanha.NomeNegócio, campanha.ID)
-                    } | ${campanha.CampanhaNome}</h3>
+                    <h3 class="campanha-titulo">${campanha.CodigoCampanha} | ${campanha.CampanhaNome}</h3>
                     <p class="status ${status.classe}">Status: ${status.texto}</p>
                     <button class="ver-mais-btn" data-id="${campanha.ID}">Ver Mais</button>
                 </div>
@@ -225,10 +223,6 @@ async function carregarCampanhas() {
         // Inserir novo elemento à lista
         lista.appendChild(item);
     });
-}
-
-function GerarCodigo(plataforma, nomeNegócio, id) {
-    return `C${plataforma[0]}${nomeNegócio[0]} - ${id}`;
 }
 
 function DefinirStatus(dataComeco, dataFim) {
