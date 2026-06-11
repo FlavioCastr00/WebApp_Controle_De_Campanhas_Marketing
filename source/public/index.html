@@ -12,7 +12,10 @@
     <ul id="lista"></ul>
 
     <div class="main">
-        <button type="button" class="add-btn">ADD +</button>
+        <div class="acoes-topo">
+            <button type="button" class="add-btn">ADD +</button>
+        </div>
+        
         <div id="lista-div">
             <!-- Lista de Campanhas -->
         </div>
@@ -59,6 +62,12 @@
             <select id="plataforma" name="plataforma" required>
                 <option value="Instagram">Instagram</option>
                 <option value="Facebook">Facebook</option>
+            </select>
+
+            <label for="nome-do-negocio">Nome do Negócio:</label>
+            <select id="nome-do-negocio" name="nome-do-negocio" required>
+                <option value="Sala Livre">Sala Livre</option>
+                <option value="FMU - Polo Barra Funda">FMU - Polo Barra Funda</option>
             </select>
 
             <label for="data-comeco">Data de Início:</label>

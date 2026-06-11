@@ -31,7 +31,8 @@ app.post("/Campanhas", (req, res) => {
         DataFim,
         CustoPorDia,
         ISS,
-        PIS
+        PIS,
+        NomeNegócio
     } = req.body;
 
     const sql = `
@@ -43,12 +44,13 @@ app.post("/Campanhas", (req, res) => {
             DataFim,
             CustoPorDia,
             ISS,
-            PIS
+            PIS,
+            NomeNegócio
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const valores = [NomeCampanha, Plataforma, Duracao, DataComeco, DataFim, CustoPorDia, ISS, PIS];
+    const valores = [NomeCampanha, Plataforma, Duracao, DataComeco, DataFim, CustoPorDia, ISS, PIS, NomeNegócio];
 
     db.run(sql, valores, function(err) {
         if (err) {

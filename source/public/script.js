@@ -43,6 +43,10 @@ document.addEventListener("click", (event) => {
 formulario.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    const form = document.getElementById("formulario");
+    const modalAdd = document.getElementById("modal-add");
+    const overlay = document.getElementById("modal-overlay");
+
     const nome = document.getElementById("nome-campanha").value;
     const plataforma = document.getElementById("plataforma").value;
     const dataComeco = document.getElementById("data-comeco").value;
@@ -50,6 +54,7 @@ formulario.addEventListener("submit", async (event) => {
     const custoPorDia = parseFloat(document.getElementById("custo-por-dia").value);
     const iss = parseFloat(document.getElementById("custo-iss").value);
     const pis = parseFloat(document.getElementById("custo-pis").value);
+    const negocio = document.getElementById("nome-do-negocio").value;
 
     const inicio = new Date(dataComeco + "T00:00:00");
     const fim = new Date(dataFim + "T00:00:00");
@@ -93,7 +98,8 @@ formulario.addEventListener("submit", async (event) => {
         DataFim: dataFim,
         CustoPorDia: custoPorDia,
         ISS: iss,
-        PIS: pis
+        PIS: pis,
+        NomeNegócio: negocio
     }
 
     console.log(data);
@@ -113,7 +119,7 @@ formulario.addEventListener("submit", async (event) => {
         }
 
         const resultado = await resposta.json();
-        console.log(resposta);
+        console.log(resultado);
         
         alert("Campanha criada!");
 
@@ -123,6 +129,10 @@ formulario.addEventListener("submit", async (event) => {
         console.error(erro);
         alert("Erro ao criar a campanha");
     }
+
+    form.reset();
+    modalAdd.classList.add("hide");
+    overlay.classList.add("hide");
 });
 
 // Carregar Detalhes Diários da Campanha
@@ -167,6 +177,7 @@ async function carregarCampanhas() {
     lista.innerHTML = "";
 
     campanhas.forEach(campanha => {
+        const status = DefinirStatus(campanha.DataComeco, campanha.DataFim);
 
         const item = document.createElement('div');
 
@@ -175,7 +186,10 @@ async function carregarCampanhas() {
             <hr>
             <div class="campanha-div">
                 <div class="cabecalho-campanha">
-                    <h3>${campanha.ID} - ${campanha.CampanhaNome}</h3>
+                    <h3 class="campanha-titulo">${
+                        GerarCodigo(campanha.Plataforma, campanha.NomeNegócio, campanha.ID)
+                    } | ${campanha.CampanhaNome}</h3>
+                    <p class="status ${status.classe}">Status: ${status.texto}</p>
                     <button class="ver-mais-btn" data-id="${campanha.ID}">Ver Mais</button>
                 </div>
                 <div class="detalhes-campanha-div">
@@ -211,4 +225,36 @@ async function carregarCampanhas() {
         // Inserir novo elemento à lista
         lista.appendChild(item);
     });
+}
+
+function GerarCodigo(plataforma, nomeNegócio, id) {
+    return `C${plataforma[0]}${nomeNegócio[0]} - ${id}`;
+}
+
+function DefinirStatus(dataComeco, dataFim) {
+    const hoje = new Date();
+    const inicio = new Date(dataComeco);
+    const fim = new Date(dataFim);
+
+    if (hoje < inicio)
+    {
+        return {
+            texto: "Aguardando Inicio",
+            classe: "status-aguardando"
+        };
+    }
+    else if (hoje > inicio && hoje < fim)
+    {
+        return {
+            texto: "Em Progresso",
+            classe: "status-progresso"
+        };
+    }
+    else
+    {
+        return {
+            texto: "Finalizada",
+            classe: "status-finalizada"
+        };
+    }
 }
