@@ -8,9 +8,20 @@ body {
     margin: 5vh auto;
     padding: 15px;
     background-color: #dfdfdf;
+    max-width: 1400px;
 }
 
 #lista-div {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(420px, 1fr)
+        );
+
+    gap: 16px;
+
     width: 100%;
 }
 
@@ -114,6 +125,154 @@ body {
 .status-finalizada {
     background-color: #f8d7da;
     color: #721c24;
+}
+
+/* ===== Campaign Cards ===== */
+
+#lista-div {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(300px, 1fr));
+
+    gap: 16px;
+
+    width: 100%;
+}
+
+.campanha-card {
+
+    background: white;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.08);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+}
+
+.campanha-info h3 {
+
+    margin: 0;
+
+    font-size: 1.15rem;
+
+}
+
+.nome {
+
+    margin: 4px 0 0;
+
+    color: #666;
+
+    font-size: .95rem;
+
+}
+
+/* status below title */
+
+.status {
+
+    width: fit-content;
+
+    margin: 0;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+}
+
+/* campaign summary */
+
+.campanha-resumo {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    font-size: 14px;
+
+    color: #555;
+
+}
+
+.custo-total {
+
+    margin-top: 4px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #155724;
+
+}
+
+/* buttons always at bottom */
+
+.acoes {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: auto;
+
+}
+
+.acoes button {
+
+    flex: 1;
+
+    border: none;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+.ver-mais-btn {
+
+    background: #2f2f2f;
+
+    color: white;
+
+}
+
+.editar-btn {
+
+    background: #ffc107;
+
+}
+
+.excluir-btn {
+
+    background: #dc3545;
+
+    color: white;
+
+}
+
+.acoes button:hover {
+
+    opacity: .9;
+
 }
 
 /* Modal de Detalhes */

@@ -7,36 +7,58 @@ document.addEventListener("click", (event) => {
     const addBtn = event.target.closest(".add-btn");
     const verMaisBtn = event.target.closest(".ver-mais-btn");
     const fecharBtn = event.target.closest(".fechar-btn");
+    const editarBtn = event.target.closest(".editar-btn");
+    const excluirBtn = event.target.closest(".excluir-btn");
 
     const modalAdd = document.getElementById("modal-add");
     const modalDetalhes = document.getElementById("modal-detalhes");
     const overlay = document.getElementById("modal-overlay");
 
     if (addBtn) {
-
         modalAdd.classList.remove("hide");
         overlay.classList.remove("hide");
+        return;
     }
-    else if (verMaisBtn) {
 
-        const id = verMaisBtn.getAttribute("data-id"); // Armazena o ID para a busca do DB
+    if (verMaisBtn) {
+
+        const id = verMaisBtn.dataset.id;
 
         modalDetalhes.classList.remove("hide");
         overlay.classList.remove("hide");
 
         CarregarDetalhes(id);
-    }
-    else if (fecharBtn) {
 
-        modalDetalhes.classList.add("hide");
-        overlay.classList.add("hide");
+        return;
     }
-    else if (event.target.id === "modal-overlay") {
+
+    if (editarBtn) {
+
+        const id = editarBtn.dataset.id;
+
+        console.log("Editar campanha", id);
+
+        return;
+    }
+
+    if (excluirBtn) {
+
+        const id = excluirBtn.dataset.id;
+
+        console.log("Excluir campanha", id);
+
+        return;
+    }
+
+    if (fecharBtn || event.target.id === "modal-overlay") {
 
         modalAdd.classList.add("hide");
         modalDetalhes.classList.add("hide");
         overlay.classList.add("hide");
+
+        return;
     }
+
 });
 
 // Processar dados do formulario e enviar
@@ -178,51 +200,78 @@ async function carregarCampanhas() {
 
     campanhas.forEach(campanha => {
         const status = DefinirStatus(campanha.DataComeco, campanha.DataFim);
+        const custoTotal = CalcularCustoTotal(campanha.CustoPorDia, campanha.CampanhaDuracao, campanha.ISS, campanha.PIS);
 
         const item = document.createElement('div');
+        item.className = "campanha-card"
 
         // Inserir HTML no novo elemento
         item.innerHTML = `
-            <hr>
-            <div class="campanha-div">
-                <div class="cabecalho-campanha">
-                    <h3 class="campanha-titulo">${campanha.CodigoCampanha} | ${campanha.CampanhaNome}</h3>
-                    <p class="status ${status.classe}">Status: ${status.texto}</p>
-                    <button class="ver-mais-btn" data-id="${campanha.ID}">Ver Mais</button>
-                </div>
-                <div class="detalhes-campanha-div">
-                    <table class="tabela-detalhes">
-                        <thead>
-                            <tr>
-                                <th>Plataforma</th>
-                                <th>Duração</th>
-                                <th>Inicio</th>
-                                <th>Fim</th>
-                                <th>Custo Por Dia</th>
-                                <th>ISS</th>
-                                <th>PIS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>${campanha.Plataforma}</td>
-                                <td>${campanha.CampanhaDuracao}</td>
-                                <td>${campanha.DataComeco}</td>
-                                <td>${campanha.DataFim}</td>
-                                <td>${campanha.CustoPorDia}</td>
-                                <td>${campanha.ISS}</td>
-                                <td>${campanha.PIS}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+
+            <div class="campanha-info">
+
+                <h3>${campanha.CodigoCampanha}</h3>
+
+                <p class="nome">
+                    ${campanha.CampanhaNome}
+                </p>
+
             </div>
-            <hr>
+
+            <p class="status ${status.classe}">
+                ${status.texto}
+            </p>
+
+            <div class="campanha-resumo">
+
+                <span>
+                    📱 ${campanha.Plataforma}
+                    •
+                    ⏱ ${campanha.CampanhaDuracao} dias
+                </span>
+
+                <span>
+                    📅 ${campanha.DataComeco}
+                </span>
+
+                <span class="custo-total">
+                    💰 Total:
+                    ${custoTotal}
+                </span>
+
+            </div>
+
+            <div class="acoes">
+
+                <button
+                    class="ver-mais-btn"
+                    data-id="${campanha.ID}">
+                    Ver
+                </button>
+
+                <button
+                    class="editar-btn"
+                    data-id="${campanha.ID}">
+                    Editar
+                </button>
+
+                <button
+                    class="excluir-btn"
+                    data-id="${campanha.ID}">
+                    Excluir
+                </button>
+
+            </div>
+
         `;
 
         // Inserir novo elemento à lista
         lista.appendChild(item);
     });
+}
+
+function CalcularCustoTotal(custoDia, duracao, iss, pis) {
+    return ((custoDia * duracao) + iss + pis).toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
 }
 
 function DefinirStatus(dataComeco, dataFim) {
