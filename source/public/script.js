@@ -12,6 +12,7 @@ document.addEventListener("click", (event) => {
 
     const modalAdd = document.getElementById("modal-add");
     const modalDetalhes = document.getElementById("modal-detalhes");
+    const modalEditar = document.getElementById("modal-editar");
     const overlay = document.getElementById("modal-overlay");
 
     if (addBtn) {
@@ -36,7 +37,7 @@ document.addEventListener("click", (event) => {
 
         const id = editarBtn.dataset.id;
 
-        console.log("Editar campanha", id);
+        AbrirModalEditar(id);
 
         return;
     }
@@ -54,6 +55,7 @@ document.addEventListener("click", (event) => {
 
         modalAdd.classList.add("hide");
         modalDetalhes.classList.add("hide");
+        modalEditar.classList.add("hide");
         overlay.classList.add("hide");
 
         return;
@@ -155,6 +157,41 @@ formulario.addEventListener("submit", async (event) => {
     form.reset();
     modalAdd.classList.add("hide");
     overlay.classList.add("hide");
+});
+
+// Enviar dados do modal de editar
+document.getElementById("formulario-editar").addEventListener("submit", async (event)=>{
+
+    event.preventDefault();
+
+    const id = document.getElementById("editar-id").value;
+
+    const dados = {
+        NomeCampanha: document.getElementById("editar-nome").value,
+        Plataforma: document.getElementById("editar-plataforma").value,
+        NomeNegocio: document.getElementById("editar-negocio").value,
+        DataComeco: document.getElementById("editar-data-comeco").value,
+        DataFim: document.getElementById("editar-data-fim").value,
+        CustoPorDia: parseFloat(document.getElementById("editar-custo").value),
+        ISS: parseFloat(document.getElementById("editar-iss").value),
+        PIS: parseFloat(document.getElementById("editar-pis").value)
+    };
+
+    await fetch(`/Campanhas/${id}`, {
+        method:"PUT",
+
+        headers:{
+        "Content-Type":
+        "application/json"
+        },
+
+        body: JSON.stringify(dados)
+    });
+
+    document.getElementById("modal-editar").classList.add("hide");
+    document.getElementById("modal-overlay").classList.add("hide");
+
+    carregarCampanhas();
 });
 
 // Carregar Detalhes Diários da Campanha
@@ -268,6 +305,26 @@ async function carregarCampanhas() {
         // Inserir novo elemento à lista
         lista.appendChild(item);
     });
+}
+
+// Carregar modal de edição
+async function AbrirModalEditar(id) {
+
+    const response = await fetch(`/Campanhas/${id}`);
+    const campanha = await response.json();
+
+    document.getElementById("editar-id").value = campanha.ID;
+    document.getElementById("editar-nome").value = campanha.CampanhaNome;
+    document.getElementById("editar-plataforma").value = campanha.Plataforma;
+    document.getElementById("editar-negocio").value = campanha.NomeNegocio;
+    document.getElementById("editar-data-comeco").value = campanha.DataComeco;
+    document.getElementById("editar-data-fim").value = campanha.DataFim;
+    document.getElementById("editar-custo").value = campanha.CustoPorDia;
+    document.getElementById("editar-iss").value = campanha.ISS;
+    document.getElementById("editar-pis").value = campanha.PIS;
+    document.getElementById("modal-editar").classList.remove("hide");
+    document.getElementById("modal-overlay").classList.remove("hide");
+
 }
 
 function CalcularCustoTotal(custoDia, duracao, iss, pis) {

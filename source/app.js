@@ -115,6 +115,31 @@ app.post("/Campanhas", (req, res) => {
     );
 });
 
+// Endpoint: Obter detalhes de uma campanha específica
+app.get("/Campanhas/:id", (req, res) => {
+
+    const id = req.params.id;
+
+    db.get(
+        `
+        SELECT *
+        FROM CampanhasImpulsionamento
+        WHERE ID = ?
+        `,
+        [id],
+
+        (err, row) => {
+
+            if (err) {
+                return res.status(500).json({
+                        error: err.message
+                    });
+            }
+            res.json(row);
+        }
+    );
+});
+
 // Endpoint: Obter detalhes diários da campanha
 app.get("/Campanhas/:id/detalhes", (req, res) => {
     // Extrair ID da URL
@@ -134,7 +159,76 @@ app.get("/Campanhas/:id/detalhes", (req, res) => {
         }
         res.json(rows);
     });
-}); 
+});
+
+app.put("/Campanhas/:id", (req, res) => {
+
+    const id = req.params.id;
+
+    const {
+        NomeCampanha,
+        Plataforma,
+        DataComeco,
+        DataFim,
+        CustoPorDia,
+        ISS,
+        PIS,
+        NomeNegocio
+    } = req.body;
+
+    const sql = `
+        UPDATE CampanhasImpulsionamento
+
+        SET
+            CampanhaNome=?,
+            Plataforma=?,
+            DataComeco=?,
+            DataFim=?,
+            CustoPorDia=?,
+            ISS=?,
+            PIS=?,
+            NomeNegocio=?
+
+        WHERE ID=?
+    `;
+
+    db.run(
+        sql,
+
+        [
+            NomeCampanha,
+            Plataforma,
+            DataComeco,
+            DataFim,
+            CustoPorDia,
+            ISS,
+            PIS,
+            NomeNegocio,
+            id
+        ],
+
+        function(err){
+
+            if(err){
+
+                return res
+                    .status(500)
+                    .json({
+                        error:
+                        err.message
+                    });
+
+            }
+
+            res.json({
+                sucesso:true
+            });
+
+        }
+
+    );
+
+});
 
 app.listen(3000, () => {
   console.log(`API running on http://localhost:${port}`);

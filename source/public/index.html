@@ -54,6 +54,7 @@
     <!-- Modal de Formulario para Adicionar Campanha -->
     <div id="modal-add" class="add hide">
         <h3>Adicione uma Campanha</h3>
+
         <form id="formulario">
             <label for="nome-campanha">Nome da Campanha:</label>
             <input type="text" id="nome-campanha" name="nome-campanha" placeholder="ex. Graduação 2026" required>
@@ -87,6 +88,50 @@
 
             <button type="submit">Enviar</button>
         </form>
+
+    </div>
+
+    <!-- Modal Editar Campanha -->
+    <div id="modal-editar" class="add hide">
+        <h3>Editar Campanha</h3>
+
+        <form id="formulario-editar">
+
+            <input type="hidden" id="editar-id">
+
+            <label>Nome</label>
+            <input type="text" id="editar-nome">
+
+            <label>Plataforma</label>
+            <select id="editar-plataforma">
+                <option value="Instagram">Instagram</option>
+                <option value="Facebook">Facebook</option>
+            </select>
+
+            <label>Negócio</label>
+            <select id="editar-negocio">
+                <option value="Sala Livre">Sala Livre</option>
+                <option value="FMU - Polo Barra Funda">FMU - Polo Barra Funda</option>
+            </select>
+
+            <label>Data início</label>
+            <input type="date" id="editar-data-comeco">
+
+            <label>Data fim</label>
+            <input type="date" id="editar-data-fim">
+
+            <label>Custo por dia</label>
+            <input type="number" step="0.01" id="editar-custo">
+
+            <label>ISS</label>
+            <input type="number" step="0.01" id="editar-iss">
+
+            <label>PIS</label>
+            <input type="number" step="0.01" id="editar-pis">
+
+            <button type="submit">Salvar Alterações</button>
+        </form>
+        
     </div>
 
     <script src="script.js"></script>
